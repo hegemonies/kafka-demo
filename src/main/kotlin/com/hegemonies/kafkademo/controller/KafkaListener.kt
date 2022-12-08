@@ -14,6 +14,6 @@ class KafkaListener {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this.javaClass)
+        private val logger = LoggerFactory.getLogger(this::class.java.declaringClass)
     }
 }

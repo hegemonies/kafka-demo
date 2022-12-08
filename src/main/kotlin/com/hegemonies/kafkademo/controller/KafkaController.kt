@@ -1,32 +1,24 @@
 package com.hegemonies.kafkademo.controller
 
-import com.hegemonies.kafkademo.consts.KafkaTopics
 import com.hegemonies.kafkademo.dto.Message
+import com.hegemonies.kafkademo.service.IMessageService
 import org.slf4j.LoggerFactory
-import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class KafkaController(
-    private val kafkaTemplate: KafkaTemplate<String, String>,
+    private val messageService: IMessageService,
 ) {
 
     @PostMapping("send")
-    suspend fun sendMessage(message: Message) {
+    suspend fun sendMessage(@RequestBody message: Message) {
         logger.info("Received message [$message], send it to message broker")
-
-        kafkaTemplate.send(KafkaTopics.TEST_TOPIC, message.message).addCallback(
-            {
-                logger.info("Success send message to message broker")
-            },
-            { error ->
-                logger.error("Failed to send message to message broker: ", error)
-            }
-        )
+        messageService.send(message)
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(this.javaClass)
+        private val logger = LoggerFactory.getLogger(this::class.java.declaringClass)
     }
 }

@@ -25,3 +25,21 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -Ukafka_demo -d kafka_demo" ]
+      interval: 5s
+      timeout: 1s
+      retries: 100
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=kafka_demo
+      - POSTGRES_PASSWORD=kafka_demo
+      - POSTGRES_DB=kafka_demo
+    volumes:
+      - ./postgres/postgresql.conf:/etc/postgresql/postgresql.conf
+    command: "postgres -c config_file=/etc/postgresql/postgresql.conf"
