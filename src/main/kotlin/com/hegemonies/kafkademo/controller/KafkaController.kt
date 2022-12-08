@@ -1,6 +1,6 @@
 package com.hegemonies.kafkademo.controller
 
-import com.hegemonies.kafkademo.dto.Message
+import com.hegemonies.kafkademo.dto.MessageDto
 import com.hegemonies.kafkademo.service.IMessageService
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,7 +13,7 @@ class KafkaController(
 ) {
 
     @PostMapping("send")
-    suspend fun sendMessage(@RequestBody message: Message) {
+    suspend fun sendMessage(@RequestBody message: MessageDto) {
         logger.info("Received message [$message], send it to message broker")
         messageService.send(message)
     }

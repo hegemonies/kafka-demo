@@ -1,7 +1,7 @@
 package com.hegemonies.kafkademo.service
 
 import com.hegemonies.kafkademo.consts.KafkaTopics
-import com.hegemonies.kafkademo.dto.Message
+import com.hegemonies.kafkademo.dto.MessageDto
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
@@ -11,7 +11,7 @@ class MessageService(
     private val kafkaTemplate: KafkaTemplate<String, String>,
 ) : IMessageService {
 
-    override suspend fun send(message: Message) {
+    override suspend fun send(message: MessageDto) {
         kafkaTemplate.send(KafkaTopics.TEST_TOPIC, message.message).thenAccept {
             logger.info("Success send message to message broker")
         }.exceptionally { error ->
