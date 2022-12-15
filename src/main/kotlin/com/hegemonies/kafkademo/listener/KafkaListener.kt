@@ -15,7 +15,7 @@ class KafkaListener(
     @KafkaListener(topics = [KafkaTopics.TEST_TOPIC], groupId = "1")
     fun listenMessages(message: String) {
         logger.info("Received message from message broker: $message")
-        messageRepository.save(Message(message = message))
+        messageRepository.save(Message(message = message)).block()
     }
 
     companion object {

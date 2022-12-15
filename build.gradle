@@ -6,6 +6,7 @@ plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.7.21'
 	id 'org.jetbrains.kotlin.plugin.spring' version '1.7.21'
 	id 'org.jetbrains.kotlin.plugin.jpa' version '1.7.21'
+	id "com.google.cloud.tools.jib" version "3.3.1"
 }
 
 group = 'com.hegemonies'
@@ -14,6 +15,9 @@ sourceCompatibility = '17'
 
 repositories {
 	mavenCentral()
+	maven {
+		url 'https://s01.oss.sonatype.org/content/repositories/snapshots'
+	}
 }
 
 dependencies {
@@ -26,8 +30,13 @@ dependencies {
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
 	implementation 'org.springframework.kafka:spring-kafka'
+
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'org.postgresql:r2dbc-postgresql'
+
+	implementation 'org.liquibase:liquibase-core:4.18.0'
+	implementation 'io.github.daggerok:liquibase-r2dbc-spring-boot-starter:2.1.7-SNAPSHOT'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
@@ -42,4 +51,14 @@ tasks.withType(KotlinCompile) {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+jib {
+	from {
+		image = "azul/zulu-openjdk:17-jre-latest"
+	}
+
+	to {
+		image = "hegemonies/kafka-demo:latest"
+	}
 }

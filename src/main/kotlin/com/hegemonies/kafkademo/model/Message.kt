@@ -1,18 +1,14 @@
 package com.hegemonies.kafkademo.model
 
-import jakarta.persistence.*
+import jakarta.persistence.Id
 import org.hibernate.Hibernate
 import org.springframework.data.relational.core.mapping.Table
 
-@Entity
-@Table(name = "message")
+@Table(name = "messages")
 data class Message(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    val id: Long = 0,
+    val id: Long? = null,
 
-    @Column(name = "message", nullable = false)
     val message: String,
 ) {
 
@@ -21,7 +17,7 @@ data class Message(
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
         other as Message
 
-        return id != 0L && id == other.id
+        return id != null && id == other.id
     }
 
     override fun hashCode(): Int = javaClass.hashCode()
