@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  title: Electronic Queue API
+  description: API for electronic queue
+  version: '0.1'
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Queue
+    description: Operations with electronic queue
+  - name: Auth
+    description: Operations with authorization
+
+paths:
+
+  /auth:
+    post:
+      tags:
+        - Auth
+      summary: Auth a service manager in the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: 'ivan'
+                password:
+                  type: string
+                  example: 'ivanov'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - token
+                properties:
+                  token:
+                    type: string
+                    example: 'aGVsbG8gd29ybGQK'
+        400:
+          description: Happens when errors in client side
+        500:
+          description: Happens when errors in server side
+
+  /registration:
+    post:
+      tags:
+        - Auth
+      summary: Registration of a service manager in the system
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - password_again
+              properties:
+                username:
+                  type: string
+                  example: 'ivan'
+                password:
+                  type: string
+                  example: 'ivanov'
+                password_again:
+                  type: string
+                  example: 'ivanov'
+      responses:
+        200:
+          description: Successful operation
+        400:
+          description: Happens when errors in client side
+        500:
+          description: Happens when errors in server side
+
+  /tickets/new:
+    get:
+      tags:
+        - Queue
+      summary: Creates new tickets in queue
+      parameters:
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/TicketType'
+      responses:
+        200:
+          description: Ticket number
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - ticket_number
+                properties:
+                  ticket_number:
+                    type: integer
+                    format: int64
+                    example: 176
+        400:
+          description: Happens when errors in client side
+        500:
+          description: Happens when errors in server side
+
+  /tickets/active:
+    get:
+      tags:
+        - Queue
+      summary: Returns list of active tickets
+      responses:
+        200:
+          description: Tickets list
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - tickets
+                properties:
+                  tickets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ticket'
+        400:
+          description: Happens when errors in client side
+        500:
+          description: Happens when errors in server side
+
+  /tickets/get:
+    get:
+      tags:
+        - Queue
+      summary: Manager gets ticket for service
+      parameters:
+        - name: ticket_number
+          in: query
+          schema:
+            type: integer
+            format: int64
+            example: 176
+        - name: Token
+          in: header
+          schema:
+            type: string
+            example: 'aGVsbG8gd29ybGQK'
+      responses:
+        200:
+          description: Successful operation
+        400:
+          description: Happens when errors in client side
+        500:
+          description: Happens when errors in server side
+
+
+components:
+  schemas:
+
+    TicketType:
+      type: string
+      enum:
+        - MORTGAGE
+        - SALARY
+        - ACCOUNT
+        - PAY_BILL
+        - MAIL_SERVICE
+      example: 'ACCOUNT'
+
+    Ticket:
+      type: object
+      required:
+        - ticket_number
+      properties:
+        ticket_number:
+          type: integer
+          format: int64
+          example: 176
