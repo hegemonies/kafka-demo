@@ -6,16 +6,26 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
 
-    <changeSet id="2022-12-15 13-00" author="hegemonies">
+    <changeSet id="2022-12-16 14-30" author="hegemonies">
 
-        <createTable tableName="messages">
+        <createTable tableName="tokens">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"
                              nullable="false"
                              unique="true"/>
             </column>
 
-            <column name="message" type="TEXT">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"
+                             unique="true"/>
+            </column>
+
+            <column name="created_at" type="BIGINT">
+                <constraints nullable="false"
+                             unique="false"/>
+            </column>
+
+            <column name="token" type="TEXT">
                 <constraints nullable="false"
                              unique="false"/>
             </column>

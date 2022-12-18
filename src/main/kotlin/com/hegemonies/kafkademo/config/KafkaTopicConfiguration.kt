@@ -21,7 +21,7 @@ class KafkaTopicConfiguration(
     }
 
     @Bean
-    fun topic1(): NewTopic {
-        return NewTopic(KafkaTopics.TEST_TOPIC, 1, 1.toShort())
+    fun electronicQueueTopic(): NewTopic {
+        return NewTopic(KafkaTopics.ELECTRONIC_QUEUE_TOPIC, 1, 1.toShort())
     }
 }

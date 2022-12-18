@@ -1,5 +1,5 @@
 package com.hegemonies.kafkademo.consts
 
 object KafkaTopics {
-    const val TEST_TOPIC = "test"
+    const val ELECTRONIC_QUEUE_TOPIC = "electronic_queue_topic"
 }
