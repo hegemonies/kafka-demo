@@ -13,7 +13,7 @@ import com.hegemonies.kafkademo.model.Ticket
 import com.hegemonies.kafkademo.repository.TicketRepository
 import com.hegemonies.kafkademo.service.TimeService
 import com.hegemonies.kafkademo.service.auth.AuthService
-import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
@@ -52,19 +52,19 @@ class QueueService(
 
         val lastTicket = Either.catch {
             ticketRepository.findTopByCreatedAtAfterAndType(todayMidnight, ticketType.shortValue)
-                .awaitFirst()
+                .awaitFirstOrNull()
         }.getOrHandle { error ->
             return error.toErrorResult().toEither()
         }
 
         val ticket = Ticket(
-            ticketNumber = lastTicket.ticketNumber + offset + 1,
+            ticketNumber = (lastTicket?.ticketNumber ?: offset) + 1,
             type = ticketType.shortValue,
             createdAt = System.currentTimeMillis(),
         )
 
         Either.catch {
-            ticketRepository.save(ticket).awaitFirst().also { ticket ->
+            ticketRepository.save(ticket).awaitFirstOrNull()?.also { ticket ->
                 logger.debug("Successful created ticket #${ticket.id}")
             }
         }.getOrHandle { error ->
@@ -72,12 +72,7 @@ class QueueService(
         }
 
         Either.catch {
-            kafkaTemplate.send(
-                KafkaTopics.ELECTRONIC_QUEUE_TOPIC,
-                ticketType.value,
-                ticket.hashCode().toString(),
-                ticket
-            )
+            kafkaTemplate.send(KafkaTopics.ELECTRONIC_QUEUE_TOPIC, ticket)
         }.getOrHandle { error ->
             return error.toErrorResult().toEither()
         }

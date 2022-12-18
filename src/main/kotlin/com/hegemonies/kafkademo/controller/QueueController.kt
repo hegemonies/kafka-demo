@@ -6,6 +6,7 @@ import com.hegemonies.kafkademo.dto.TicketType
 import com.hegemonies.kafkademo.dto.ticket.CreateTicketResponse
 import com.hegemonies.kafkademo.dto.ticket.GetTicketsResponse
 import com.hegemonies.kafkademo.service.queue.IQueueService
+import kotlinx.coroutines.reactive.awaitFirst
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
@@ -40,7 +41,7 @@ class QueueController(
 
         logger.debug("Success handle of /tickets/active request")
 
-        return GetTicketsResponse(tickets)
+        return GetTicketsResponse(tickets.collectList().awaitFirst())
     }
 
     @GetMapping("/tickets/get")
