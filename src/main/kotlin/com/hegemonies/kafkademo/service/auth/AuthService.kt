@@ -10,7 +10,6 @@ import com.hegemonies.kafkademo.repository.TokenRepository
 import com.hegemonies.kafkademo.repository.UserRepository
 import com.hegemonies.kafkademo.service.SecurityService
 import com.hegemonies.kafkademo.service.TokenService
-import kotlinx.coroutines.reactive.awaitFirst
 import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.stereotype.Service
 
@@ -36,7 +35,7 @@ class AuthService(
             )
         }
 
-        val user = userRepository.findByUsername(username).awaitFirst()
+        val user = userRepository.findByUsername(username).awaitFirstOrNull()
 
         if (user != null) {
             return Either.Left(
@@ -52,7 +51,7 @@ class AuthService(
                     username = username,
                     password = encodedPassword
                 )
-            ).awaitFirst()
+            ).awaitFirstOrNull()
         }
 
         return Either.Right(Unit)

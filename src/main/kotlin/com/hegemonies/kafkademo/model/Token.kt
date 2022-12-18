@@ -1,13 +1,12 @@
 package com.hegemonies.kafkademo.model
 
+import com.hegemonies.kafkademo.consts.TableNames
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import jakarta.persistence.Table
 import org.hibernate.Hibernate
+import org.springframework.data.relational.core.mapping.Table
 
-@Entity
-@Table(name = "tokens")
+@Table(name = TableNames.TOKENS)
 data class Token(
     @Id
     val id: Long? = null,

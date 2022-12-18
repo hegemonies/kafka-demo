@@ -9,6 +9,7 @@ import com.hegemonies.kafkademo.mapper.toErrorResult
 import com.hegemonies.kafkademo.model.Token
 import com.hegemonies.kafkademo.repository.TokenRepository
 import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -26,7 +27,7 @@ class TokenService(
     suspend fun createToken(userId: Long): Either<ErrorResult, Token> {
         val currentTimestamp = System.currentTimeMillis()
         val token = Either.catch {
-            tokenRepository.findByUserId(userId).awaitFirst()
+            tokenRepository.findByUserId(userId).awaitFirstOrNull()
         }.getOrHandle { error ->
             return error.toErrorResult().toEither()
         }
@@ -51,7 +52,7 @@ class TokenService(
                     tokenRepository.updateCreatedAtByUserId(
                         userId = userId,
                         createdAt = currentTimestamp
-                    )
+                    ).awaitFirstOrNull()
                 }.getOrHandle { error ->
                     return error.toErrorResult().toEither()
                 }

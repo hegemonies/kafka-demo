@@ -1,14 +1,13 @@
 package com.hegemonies.kafkademo.model
 
+import com.hegemonies.kafkademo.consts.TableNames
 import com.hegemonies.kafkademo.dto.TicketType
 import jakarta.persistence.Column
-import jakarta.persistence.Entity
 import jakarta.persistence.Id
-import jakarta.persistence.Table
+import org.springframework.data.relational.core.mapping.Table
 import org.hibernate.Hibernate
 
-@Entity
-@Table(name = "tickets")
+@Table(name = TableNames.TICKETS)
 data class Ticket(
     @Id
     val id: Long? = null,

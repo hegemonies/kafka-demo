@@ -1,12 +1,11 @@
 package com.hegemonies.kafkademo.model
 
-import jakarta.persistence.Entity
+import com.hegemonies.kafkademo.consts.TableNames
 import jakarta.persistence.Id
-import jakarta.persistence.Table
+import org.springframework.data.relational.core.mapping.Table
 import org.hibernate.Hibernate
 
-@Entity
-@Table(name = "users")
+@Table(name = TableNames.USERS)
 data class User(
     @Id
     val id: Long? = null,
