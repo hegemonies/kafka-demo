@@ -26,7 +26,7 @@ class QueueService(
     private val ticketRepository: TicketRepository,
     private val timeService: TimeService,
     private val kafkaTemplate: KafkaTemplate<String, Ticket>,
-    private val kafkaConsumer: KafkaConsumer<String, Ticket>,
+//    private val kafkaConsumer: KafkaConsumer<String, Ticket>,
     private val authService: AuthService,
 ) : IQueueService {
 
@@ -92,16 +92,24 @@ class QueueService(
             ).toEither()
         }
 
-        val ticket = Either.catch {
-            val ticket = kafkaConsumer.poll(Duration.ofSeconds(2)).first().value()
-            logger.debug("Get ticket: $ticket")
-            kafkaConsumer.commitAsync()
-            ticket
+        Either.catch {
+//            val records = kafkaConsumer.poll(Duration.ofSeconds(2))
+//            for (record in records) {
+//                val ticket = record.value()
+//                logger.debug("Get ticket: $ticket")
+//                kafkaConsumer.commitAsync()
+//                return Either.Right(ticket.ticketNumber)
+//            }
         }.getOrHandle { error ->
             return error.toErrorResult().toEither()
         }
 
-        return Either.Right(ticket.ticketNumber)
+        return Either.Left(
+            ErrorResult(
+                message = "Did not found ticket",
+                code = 400
+            )
+        )
     }
 
     companion object {

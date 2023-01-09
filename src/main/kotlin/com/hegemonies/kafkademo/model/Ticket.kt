@@ -1,6 +1,7 @@
 package com.hegemonies.kafkademo.model
 
 import com.hegemonies.kafkademo.consts.TableNames
+import com.hegemonies.kafkademo.dto.AbstractDto
 import com.hegemonies.kafkademo.dto.TicketType
 import jakarta.persistence.Column
 import jakarta.persistence.Id
@@ -25,7 +26,7 @@ data class Ticket(
 
     @Column(name = "closed_at")
     val closedAt: Long? = null
-) {
+) : AbstractDto() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
