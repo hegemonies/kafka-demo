@@ -10,7 +10,7 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 counter = 0
 
-for i in range(100):
+for i in range(1):
     start = time.time()
     requests.get(url)
     end = time.time()

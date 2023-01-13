@@ -1,18 +1,14 @@
 package com.hegemonies.kafkademo.listener
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.hegemonies.kafkademo.consts.KafkaConst
 import com.hegemonies.kafkademo.consts.KafkaTopics
 import com.hegemonies.kafkademo.model.Ticket
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
-import kotlin.time.Duration.Companion.seconds
 
 @Component
 class KafkaQueueListener(
