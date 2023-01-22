@@ -4,4 +4,5 @@ object TableNames {
     const val TOKENS = "tokens"
     const val USERS = "users"
     const val TICKETS = "tickets"
+    const val OUTBOX = "outbox"
 }

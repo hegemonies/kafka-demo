@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.17.xsd">
+
+    <changeSet id="2023-01-13 10-00" author="hegemonies">
+
+        <createTable tableName="outbox">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"
+                             nullable="false"
+                             unique="true"/>
+            </column>
+
+            <column name="timestamp" type="timestamptz">
+                <constraints nullable="false"
+                             unique="false"/>
+            </column>
+
+            <column name="topic" type="TEXT">
+                <constraints nullable="false"
+                             unique="false"/>
+            </column>
+
+            <column name="key" type="TEXT">
+                <constraints nullable="false"
+                             unique="false"/>
+            </column>
+
+            <column name="message" type="TEXT">
+                <constraints nullable="false"
+                             unique="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
